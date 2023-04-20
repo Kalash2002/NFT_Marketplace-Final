@@ -21,15 +21,18 @@ const searchPage = () => {
 
   useEffect(() => {
     try {
-      if (currentAccount) {
-        fetchNFTs().then((items) => {
-          setNfts(items.reverse());
-          setNftsCopy(items);
-          console.log(nfts);
-        });
-      }
+      console.log("in search useEffect");
+        const items = fetchNFTs();
+         fetchNFTs().then((items) => {
+           setNfts(items);
+           setNftsCopy(items);
+           console.log(nfts);
+         });
+
+      console.log(items,"items from");
     } catch (error) {
-      setError("Please reload the browser", error);
+      //setError("Please reload the browser", error);
+      console.log("Error in search page");
     }
   }, []);
 
@@ -69,7 +72,8 @@ const searchPage = () => {
         onClearSearch={onClearSearch}
       />
       <Filter />
-      {nfts.length == 0 ? <Loader /> : <NFTCardTwo NFTData={nfts} />}
+      {/* {nfts.length == 0 ? <Loader /> : <NFTCardTwo NFTData={nfts} />} */}
+      <NFTCardTwo NFTData={nfts} />
       <Slider />
       <Brand />
     </div>

@@ -12,7 +12,8 @@ import { LikeProfile } from "../../components/componentsindex";
 const NFTCardTwo = ({ NFTData }) => {
   const [like, setLike] = useState(false);
   const [likeInc, setLikeInc] = useState(21);
-
+  //console.log("in NFTcardtwo");
+  //console.log(NFTData);
   const likeNFT = () => {
     if (!like) {
       setLike(true);

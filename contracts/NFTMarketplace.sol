@@ -12,11 +12,11 @@ contract NFTMarketplace is ERC721URIStorage {
     Counters.Counter private _tokenIds;
     Counters.Counter private _itemsSold;
 
-    uint256 listingPrice = 0.025 ether;
+    uint256 listingPrice = 0.0025 ether;
     address payable owner;
 
     mapping(uint256 => MarketItem) private idToMarketItem;
-
+    string public text = "contract connected";
     struct MarketItem {
         uint256 tokenId;
         address payable seller;
@@ -79,11 +79,11 @@ contract NFTMarketplace is ERC721URIStorage {
     }
 
     function createMarketItem(uint256 tokenId, uint256 price) private {
-        require(price > 0, "Price must be at least 1 wei");
-        require(
-            msg.value == listingPrice,
-            "Price must be equal to listing price"
-        );
+        // require(price > 0, "Price must be at least 1 wei");
+        // require(
+        //     msg.value == listingPrice,
+        //     "Price must be equal to listing price"
+        // );
 
         idToMarketItem[tokenId] = MarketItem(
             tokenId,
@@ -203,5 +203,9 @@ contract NFTMarketplace is ERC721URIStorage {
             }
         }
         return items;
+    }
+
+    function  test() public view returns (string memory) {
+        return text;
     }
 }
