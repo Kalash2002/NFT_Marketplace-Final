@@ -16,6 +16,8 @@ const AuthorNFTCardBox = ({
   nfts,
   myNFTS,
 }) => {
+
+  // console.log("in Author nft card", nfts);
   // const collectiablesArray = [
   //   images.nft_image_1,
   //   images.nft_image_2,

@@ -188,9 +188,13 @@ export const NFTMarketplaceProvider = ({ children }) => {
       console.log(url,"url");
       console.log(price,"price");
       ////////////////////////////////////////////////
-     const transaction= await contract.createToken(url, price,{
-        value: listingPrice.toString(),
-      })
+      const transaction = !isReselling
+      ? await contract.createToken(url, price, {
+          value: listingPrice.toString(),
+        })
+      : await contract.resellToken(id, price, {
+          value: listingPrice.toString(),
+        });
 
       await transaction.wait();
       console.log(transaction,"transaction");
@@ -212,10 +216,10 @@ export const NFTMarketplaceProvider = ({ children }) => {
         const items = await Promise.all(
           data.map(
             async ({ tokenId, seller, owner, price: unformattedPrice }) => {
-              console.log("in async");
+              //console.log("in async");
               const tokenURI = await contract.tokenURI(tokenId);
               let uri = `https://${tokenURI.slice(15)}`
-              console.log(uri);
+              //console.log(uri);
               console.log("tokenURI", tokenURI );
               const {
               data: { image, name, description },
@@ -260,21 +264,24 @@ export const NFTMarketplaceProvider = ({ children }) => {
   //--FETCHING MY NFT OR LISTED NFTs
   const fetchMyNFTsOrListedNFTs = async (type) => {
     try {
-      if (currentAccount) {
-        const contract = await connectingWithSmartContract();
 
+        const contract = await connectingWithSmartContract();
+       // console.log("contract",contract);
         const data =
           type == "fetchItemsListed"
             ? await contract.fetchItemsListed()
             : await contract.fetchMyNFTs();
-
+        // console.log("data",data);
         const items = await Promise.all(
           data.map(
             async ({ tokenId, seller, owner, price: unformattedPrice }) => {
               const tokenURI = await contract.tokenURI(tokenId);
+              let uri = `https://${tokenURI.slice(15)}`
+              //console.log(uri);
+              console.log("tokenURI", tokenURI );
               const {
-                data: { image, name, description },
-              } = await axios.get(tokenURI);
+              data: { image, name, description },
+              } = await axios.get(uri);
               const price = ethers.utils.formatUnits(
                 unformattedPrice.toString(),
                 "ether"
@@ -293,8 +300,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
             }
           )
         );
+        console.log("items",items)
         return items;
-      }
+
     } catch (error) {
       setError("Error while fetching listed NFTs");
       setOpenError(true);
@@ -309,12 +317,14 @@ export const NFTMarketplaceProvider = ({ children }) => {
   const buyNFT = async (nft) => {
     try {
       const contract = await connectingWithSmartContract();
+      console.log("contract", contract);
       const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-
+      console.log("price",price);
+      console.log("tokenId", nft.tokenId);
       const transaction = await contract.createMarketSale(nft.tokenId, {
         value: price,
       });
-
+      console.log("transaction", transaction);
       await transaction.wait();
       router.push("/author");
     } catch (error) {

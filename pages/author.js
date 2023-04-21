@@ -75,10 +75,13 @@ const author = () => {
     });
   }, []);
 
+  //console.log(nfts,"nft in author")
   return (
     <div className={Style.author}>
       <Banner bannerImage={images.creatorbackground2} />
+      {/* ${console.log("Banner")} */}
       <AuthorProfileCard currentAccount={currentAccount} />
+      {/* ${console.log("AuthorProfileCard")} */}
       <AuthorTaps
         setCollectiables={setCollectiables}
         setCreated={setCreated}
@@ -86,7 +89,7 @@ const author = () => {
         setFollower={setFollower}
         setFollowing={setFollowing}
       />
-
+      {/* ${console.log("AuthorTaps")} */}
       <AuthorNFTCardBox
         collectiables={collectiables}
         created={created}
@@ -96,14 +99,16 @@ const author = () => {
         nfts={nfts}
         myNFTS={myNFTs}
       />
+      {/* ${console.log("AUthor NFT card box")} */}
       <Title
         heading="Popular Creators"
         paragraph="Click on music icon and enjoy NTF music or audio
 "
       />
+      {/* ${console.log("title")} */}
       <div className={Style.author_box}>
         {followerArray.map((el, i) => (
-          <FollowerTabCard i={i} el={el} />
+          <FollowerTabCard key={i+1} i={i} el={el} />
         ))}
       </div>
 
